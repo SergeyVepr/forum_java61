@@ -1,28 +1,28 @@
-import {config} from 'dotenv';
 import express from 'express';
 import mongoose from "mongoose";
+import config from "../src/config/config.js";
+import postRoutes from "./routes/post.routes.js";
 
 
-config();
-const port = process.env.PORT || 3000;
+
 const app = express();
 
 app.use(express.json());
-app.use(//TODO);
-app.use((req, res) => {
-    res.status(404).type('text/plain; charset=utf-8').send('Not Found')
-});
+app.use('/forum', postRoutes)
 
-async function startServer() {
+const connectToMongo = async  ()=> {
     try {
-        await mongoose.connect(process.env.MONGO_URI, {
-            dbName: process.env.DB_NAME
-        });
-        console.log('Connected to MongoDB: ' + process.env.MONGO_URI);
-        app.listen(port, () => console.log(`Server started on port ${port}. Press Ctrl-C to finish`));
+        await mongoose.connect(config.mongodb.uri, config.mongodb.db.dbName);
+        console.log('Connected to MongoDB: ' + config.mongodb.uri);
     } catch (e) {
         console.log('Failed connecting to MongoDB: ', e);
     }
 }
 
+const startServer = async () => {
+    await connectToMongo();
+    app.listen(config.port, () => console.log(`Server started on port ${config.port}`));
+}
+
 startServer();
+
