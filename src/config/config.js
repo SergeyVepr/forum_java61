@@ -1,6 +1,6 @@
-import {config} from 'dotenv';
+import {config as cf} from 'dotenv';
 
-config();
+cf();
 const config = {
     port: process.env.PORT || 3000,
     mongodb: {
