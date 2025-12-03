@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import config from "../src/config/config.js";
 import postRoutes from "./routes/post.routes.js";
 import errorHandler from "./middlewares/error.middleware.js";
+import userAccountRouter from "./routes/userAccount.routes.js";
 
 
 
@@ -10,6 +11,7 @@ const app = express();
 
 app.use(express.json());
 app.use('/forum', postRoutes);
+app.use('/account', userAccountRouter)
 app.use(errorHandler);
 
 const connectToMongo = async  ()=> {

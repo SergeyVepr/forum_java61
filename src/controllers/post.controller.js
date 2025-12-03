@@ -32,7 +32,7 @@ class PostController {
     async addLike(req, res, next) {
         try {
             const post = await postService.addLike(req.params.id);
-            return res.status(204).json(post);
+            return res.status(204).json(post)
         } catch (e) {
             return next(e);
         }
@@ -48,21 +48,28 @@ class PostController {
     }
 
     async addComment(req, res, next) {
-        try{
+        try {
             const {id, user} = req.params;
             const post = await postService.addComment(id, user, req.body.message);
             return res.json(post);
-        }catch (e) {
+        } catch (e) {
             return next(e);
         }
     }
 
     async getPostsByTags(req, res, next) {
+
+        let values;
+        if (Array.isArray(req.query.values)) {
+            values = req.query.values.reduce((acc, val) => acc + ',' + val);
+        } else {
+            values = req.query.values;
+        }
         try {
-            const value = req.query.values.split(',');
-            const posts = await postService.getPostsByTag(value);
+            values = req.query.values.split(',');
+            const posts = await postService.getPostsByTag(values);
             return res.status(200).json(posts);
-        }catch (e){
+        } catch (e) {
             return next(e);
         }
     }
@@ -72,7 +79,7 @@ class PostController {
             const {dateFrom, dateTo} = req.query;
             const posts = await postService.getPostsByPeriod(dateFrom, dateTo);
             return res.status(200).json(posts);
-        }catch (e){
+        } catch (e) {
             return next(e);
         }
     }
@@ -81,7 +88,7 @@ class PostController {
         try {
             const post = await postService.updatePost(req.params.id, req.body);
             return res.json(post);
-        }catch (e){
+        } catch (e) {
             return next(e);
         }
     }

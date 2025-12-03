@@ -1,8 +1,14 @@
 const errorHandler = (err, req, res, next) => {
-    const contains = err.message.includes('not found');
-    if (err.message && contains) return res.status(404).json({
+    if (err.message && err.message.includes('not found')) return res.status(404).json({
         status: 'Not found',
         code: 404,
+        message: err.message,
+        path: req.path
+    });
+
+    if (err.message && err.message.includes('User already exists')) return res.status(409).json({
+        status: 'Conflict',
+        code: 409,
         message: err.message,
         path: req.path
     });

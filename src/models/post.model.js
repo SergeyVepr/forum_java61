@@ -2,7 +2,7 @@ import {model, Schema, Types} from 'mongoose';
 import commentsScheme from './comment.model.js';
 
 const postSchema = new Schema({
-    _id: {type: String, default: () =>  new Types.ObjectId().toHexString()},
+    _id: {type: String, default: () => new Types.ObjectId().toHexString()},
     title: {type: String, required: true},
     content: {type: String, required: true},
     author: {type: String, required: true},
@@ -16,8 +16,9 @@ const postSchema = new Schema({
         transform: (doc, ret) => {
             // ret.id = ret._id;
             // delete ret._id;
-           const {_id, ...rest} = ret;
-           return {id: _id, ...rest};
+            ret.dataCreated = ret.dataCreated.toISOString().slice(0, 19);
+            const {_id, ...rest} = ret;
+            return {id: _id, ...rest};
 
         }
     }

@@ -51,9 +51,13 @@ class PostService {
     }
 
     async updatePost(postId, data) {
-        const post = await postRepository.updatePost(postId, data);
-        if (!post) throw new Error(`Post not found, id:${postId}`);
-        return post;
+        const post = await postRepository.findPostById(postId);
+        data.tags = [...data.tags, ...post.tags];
+        data.tags = new Set(data.tags);
+        data.tags = [...data.tags];
+        const victim = await postRepository.updatePost(postId, data);
+        if (!victim) throw new Error(`Post not found, id:${postId}`);
+        return victim;
     }
 }
 

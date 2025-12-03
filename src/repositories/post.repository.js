@@ -19,7 +19,7 @@ class PostRepository {
     }
 
     async findPostsByAuthor(author) {
-        return Post.find({author: author});
+        return Post.find({author: new RegExp(`^${author}$, 'i`)});
     }
 
     async addComment(postId, commenter, comment) {
